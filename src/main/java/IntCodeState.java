@@ -1,4 +1,5 @@
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Supplier;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ public class IntCodeState {
     private List<BigDecimal> operations;
     private Map<Integer, BigDecimal> memory = new HashMap<>();
     private List<BigDecimal> input;
+    private Supplier<BigDecimal> inputSupplier = null;
     private BigDecimal output;
     private boolean done = false;
     private int relativeBase = 0;
@@ -40,8 +42,12 @@ public class IntCodeState {
         return index;
     }
 
-    public List<BigDecimal> getInput() {
-        return input;
+    public void setInputSupplier(Supplier<BigDecimal> inputSupplier) {
+        this.inputSupplier = inputSupplier;
+    }
+
+    public BigDecimal getInput() {
+        return inputSupplier == null ? input.remove(0) : inputSupplier.get();
     }
 
     public void setOutput(BigDecimal output) {

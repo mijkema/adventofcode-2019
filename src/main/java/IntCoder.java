@@ -35,13 +35,14 @@ public class IntCoder {
                 state.setIndex(state.getIndex() + 4);
             } else if (operation == 3) {
                 List<BigDecimal> vals = getOperands(state, 0, operation);
-                System.out.printf("input %s\n", state.getInput().get(0));
-                state.setValue(vals.get(0).intValue(), state.getInput().remove(0));
+                BigDecimal input = state.getInput();
+//                System.out.printf("input %s\n", input);
+                state.setValue(vals.get(0).intValue(), input);
                 state.setIndex(state.getIndex() + 2);
             } else if (operation == 4) {
                 List<BigDecimal> vals = getOperands(state, 1, operation);
                 state.setOutput(vals.get(0));
-                System.out.printf("output %s\n", state.getOutput());
+//                System.out.printf("output %s\n", state.getOutput());
                 state.setIndex(state.getIndex() + 2);
                 if (stopAtOutput) {
                     return state;
