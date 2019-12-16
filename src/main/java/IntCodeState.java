@@ -1,6 +1,7 @@
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Supplier;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,11 +16,31 @@ public class IntCodeState {
     private boolean done = false;
     private int relativeBase = 0;
 
-    public IntCodeState(int index, List<BigDecimal> operations, List<BigDecimal> input, BigDecimal output) {
+    public IntCodeState(
+            int index, List<BigDecimal> operations, List<BigDecimal> input, BigDecimal output) {
         this.index = index;
         this.operations = operations;
         this.input = input;
         this.output = output;
+    }
+
+    private IntCodeState(
+            int index,
+            List<BigDecimal> operations,
+            Map<Integer, BigDecimal> memory,
+            List<BigDecimal> input,
+            Supplier<BigDecimal> inputSupplier,
+            BigDecimal output,
+            boolean done,
+            int relativeBase) {
+        this.index = index;
+        this.operations = operations;
+        this.memory = memory;
+        this.input = input;
+        this.inputSupplier = inputSupplier;
+        this.output = output;
+        this.done = done;
+        this.relativeBase = relativeBase;
     }
 
     void addInput(BigDecimal newInput) {
@@ -94,5 +115,17 @@ public class IntCodeState {
                 .add("output", output)
                 .add("relativeBase", relativeBase)
                 .toString();
+    }
+
+    public IntCodeState copy() {
+        return new IntCodeState(
+                this.index,
+                new ArrayList<>(this.operations),
+                new HashMap<>(this.memory),
+                new ArrayList<>(this.input),
+                this.inputSupplier,
+                this.output,
+                this.done,
+                this.relativeBase);
     }
 }
